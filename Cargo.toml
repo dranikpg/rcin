@@ -2,10 +2,13 @@
 name = "rcin"
 version = "0.1.0"
 authors = ["dranikpg"]
+license="MIT"
 edition = "2018"
 
 description="Functions for prototyping with cin like input"
 keywords=["input"]
+homepage="https://github.com/dranikpg/rcin"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

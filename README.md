@@ -12,7 +12,7 @@
 
  ## Example
 
- ```
+ ```rust
  let x: i32 = rcin::read_next(); // reads until it finds a valid i32
 
  print!("Enter three numbers: "); // flushes stdout by default before any input
