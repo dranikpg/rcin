@@ -9,6 +9,7 @@ description="Functions for prototyping with cin like input"
 keywords=["input"]
 
 homepage="https://github.com/dranikpg/rcin"
+readme = "README.md"
 
 [dependencies]
 lazy_static = "^1.4.0"
