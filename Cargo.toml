@@ -11,4 +11,4 @@ keywords=["input"]
 homepage="https://github.com/dranikpg/rcin"
 
 [dependencies]
-lazy_static = "*"
+lazy_static = "^1.4.0"
