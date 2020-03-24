@@ -1,0 +1,13 @@
+[package]
+name = "rcin"
+version = "0.1.0"
+authors = ["dranikpg"]
+edition = "2018"
+
+description="Functions for prototyping with cin like input"
+keywords=["input"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+lazy_static = "*"
