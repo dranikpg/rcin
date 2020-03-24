@@ -50,7 +50,6 @@ use std::io::{BufRead, Write};
 use std::str::FromStr;
 use std::sync::Mutex;
 use lazy_static::lazy_static;
-use std::ops::ShlAssign;
 struct RCin {
     data: Vec<char>,
     auto_flush: bool,
@@ -127,7 +126,7 @@ pub fn read_line() -> String {
     let guard = GLOB.lock().unwrap();
     let rc: Ref<RCin> = (*guard).borrow();
     if rc.auto_flush{
-        std::io::stdout().flush();
+        std::io::stdout().flush().ok();
     }
     let mut buf = String::new();
     while buf.trim().len() == 0{
@@ -142,10 +141,10 @@ pub fn pause(){
     let guard = GLOB.lock().unwrap();
     let rc: Ref<RCin> = (*guard).borrow();
     if rc.auto_flush{
-        std::io::stdout().flush();
+        std::io::stdout().flush().ok();
     }
     let mut buf = String::new();
-    std::io::stdin().read_line(&mut buf);
+    std::io::stdin().read_line(&mut buf).ok();
 }
 
 /// Clears the internal buffer and returns its contents

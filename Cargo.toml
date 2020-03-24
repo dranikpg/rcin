@@ -7,10 +7,8 @@ edition = "2018"
 
 description="Functions for prototyping with cin like input"
 keywords=["input"]
+
 homepage="https://github.com/dranikpg/rcin"
-
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 lazy_static = "*"
