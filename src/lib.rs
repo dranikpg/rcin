@@ -50,13 +50,13 @@ use std::io::{BufRead, Write};
 use std::str::FromStr;
 use std::sync::Mutex;
 use lazy_static::lazy_static;
-struct RCin {
+struct RCinInner {
     data: Vec<char>,
     auto_flush: bool,
 }
-impl RCin {
+impl RCinInner {
     const fn new() -> Self {
-        RCin {
+        RCinInner {
             data: Vec::new(),
             auto_flush: true,
         }
@@ -96,7 +96,7 @@ impl RCin {
     }
 }
 lazy_static! {
-    static ref GLOB: Mutex<RefCell<RCin>> = Mutex::new(RefCell::new(RCin::new()));
+    static ref GLOB: Mutex<RefCell<RCinInner>> = Mutex::new(RefCell::new(RCinInner::new()));
 }
 
 /// One-liner to read
