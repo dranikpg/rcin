@@ -44,11 +44,11 @@
 //! C++: 17GARBAGE => 17 // perfectly fine lol
 //! RCin: 17GARBAGE => None
 //! ```
-use std::cell::{RefCell, RefMut, Ref};
+use lazy_static::lazy_static;
+use std::cell::{Ref, RefCell, RefMut};
 use std::io::{BufRead, Write};
 use std::str::FromStr;
 use std::sync::Mutex;
-use lazy_static::lazy_static;
 struct RCin {
     data: Vec<char>,
     auto_flush: bool,
@@ -106,12 +106,12 @@ pub fn read<T: FromStr>() -> Option<T> {
 }
 
 /// One-liner to read and apply unwrap_or_default
-pub fn read_safe<T: FromStr + Default>() -> T{
+pub fn read_safe<T: FromStr + Default>() -> T {
     read().unwrap_or_default()
 }
 
 /// One-liner to read until a value is valid
-pub fn read_next<T: FromStr>() -> T{
+pub fn read_next<T: FromStr>() -> T {
     loop {
         if let Some(t) = read() {
             return t;
@@ -123,7 +123,7 @@ pub fn read_next<T: FromStr>() -> T{
 pub fn read_line() -> String {
     let guard = GLOB.lock().unwrap();
     let rc: Ref<RCin> = (*guard).borrow();
-    if rc.auto_flush{
+    if rc.auto_flush {
         std::io::stdout().flush().ok();
     }
     let mut buf = String::new();
@@ -135,10 +135,10 @@ pub fn read_line() -> String {
 }
 
 /// One-liner to await a newline
-pub fn pause(){
+pub fn pause() {
     let guard = GLOB.lock().unwrap();
     let rc: Ref<RCin> = (*guard).borrow();
-    if rc.auto_flush{
+    if rc.auto_flush {
         std::io::stdout().flush().ok();
     }
     let mut buf = String::new();
@@ -146,7 +146,7 @@ pub fn pause(){
 }
 
 /// Clears the internal buffer and returns its contents
-pub fn consume() -> String{
+pub fn consume() -> String {
     let guard = GLOB.lock().unwrap();
     let mut rc: RefMut<RCin> = (*guard).borrow_mut();
     let out = std::mem::replace(&mut rc.data, Vec::new());
@@ -154,7 +154,7 @@ pub fn consume() -> String{
 }
 
 /// Clears the internal buffer
-pub fn clear(){
+pub fn clear() {
     let guard = GLOB.lock().unwrap();
     let mut rc: RefMut<RCin> = (*guard).borrow_mut();
     rc.data.clear();
