@@ -11,21 +11,22 @@
 //! Depends on the [lazy_static](https://docs.rs/lazy_static) crate for storing global state
 //!
 //! ## Example
-//!
-//! ```
+//! ```no_run
+//! # extern crate rcin;
+//! # fn main() {
 //! let x: i32 = rcin::read_next(); // reads until it finds a valid i32
 //!
 //! print!("Enter three numbers: "); // flushes stdout by default before any input
-//! let mut max = i32::MIN;
-//! for _ in 0..3{
+//! let mut max = std::i32::MIN;
+//! for _ in 0..3 {
 //!     let t = rcin::read_safe();  // safe = unwrap_or_default
 //!     max = std::cmp::max(max, t);
 //! }
 //! println!("Max: {}", max);
 //!
 //! print!("Ready to continue?");
-//! rcin::pause(); //wait for newline
-//!
+//! rcin::pause(); // wait for newline
+//! # }
 //! ```
 //!
 //! ## Thread safety
