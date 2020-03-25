@@ -96,75 +96,84 @@ impl RCinInner {
     }
 }
 lazy_static! {
+    #[derive(Debug, Copy, Clone)]
+    pub static ref cin: Rcin = Rcin::new();
     static ref GLOB: Mutex<RefCell<RCinInner>> = Mutex::new(RefCell::new(RCinInner::new()));
 }
 
-/// One-liner to read
-pub fn read<T: FromStr>() -> Option<T> {
-    let guard = GLOB.lock().unwrap();
-    let mut rc: RefMut<RCin> = (*guard).borrow_mut();
-    rc.get().ok()
-}
+pub struct Rcin {}
 
-/// One-liner to read and apply unwrap_or_default
-pub fn read_safe<T: FromStr + Default>() -> T{
-    read().unwrap_or_default()
-}
+impl Rcin {
 
-/// One-liner to read until a value is valid
-pub fn read_next<T: FromStr>() -> T{
-    loop {
-        match read(){
-            Some(t) => return t,
-            _ => ()
+    fn new() -> Rcin { Rcin {} }
+
+    /// One-liner to read
+    pub fn read<T: FromStr>(&self) -> Option<T> {
+        let guard = GLOB.lock().unwrap();
+        let mut rc: RefMut<RCinInner> = (*guard).borrow_mut();
+        rc.get().ok()
+    }
+
+    /// One-liner to read and apply unwrap_or_default
+    pub fn read_safe<T: FromStr + Default>(&self) -> T{
+        self.read().unwrap_or_default()
+    }
+
+    /// One-liner to read until a value is valid
+    pub fn read_next<T: FromStr>(&self) -> T{
+        loop {
+            match self.read(){
+                Some(t) => return t,
+                _ => ()
+            }
         }
     }
-}
 
-/// One-liner to read a __nonempty__ line
-pub fn read_line() -> String {
-    let guard = GLOB.lock().unwrap();
-    let rc: Ref<RCin> = (*guard).borrow();
-    if rc.auto_flush{
-        std::io::stdout().flush().ok();
+    /// One-liner to read a __nonempty__ line
+    pub fn read_line(&self) -> String {
+        let guard = GLOB.lock().unwrap();
+        let rc: Ref<RCinInner> = (*guard).borrow();
+        if rc.auto_flush{
+            std::io::stdout().flush().ok();
+        }
+        let mut buf = String::new();
+        while buf.trim().len() == 0{
+            buf.clear();
+            std::io::stdin().lock().read_line(&mut buf).ok();
+        }
+        buf
     }
-    let mut buf = String::new();
-    while buf.trim().len() == 0{
-        buf.clear();
-        std::io::stdin().lock().read_line(&mut buf).ok();
+
+    /// One-liner to await a newline
+    pub fn pause(&self){
+        let guard = GLOB.lock().unwrap();
+        let rc: Ref<RCinInner> = (*guard).borrow();
+        if rc.auto_flush{
+            std::io::stdout().flush().ok();
+        }
+        let mut buf = String::new();
+        std::io::stdin().read_line(&mut buf).ok();
     }
-    buf
-}
 
-/// One-liner to await a newline
-pub fn pause(){
-    let guard = GLOB.lock().unwrap();
-    let rc: Ref<RCin> = (*guard).borrow();
-    if rc.auto_flush{
-        std::io::stdout().flush().ok();
+    /// Clears the internal buffer and returns its contents
+    pub fn consume(&self) -> String{
+        let guard = GLOB.lock().unwrap();
+        let mut rc: RefMut<RCinInner> = (*guard).borrow_mut();
+        let out = std::mem::replace(&mut rc.data, Vec::new());
+        out.iter().rev().collect()
     }
-    let mut buf = String::new();
-    std::io::stdin().read_line(&mut buf).ok();
-}
 
-/// Clears the internal buffer and returns its contents
-pub fn consume() -> String{
-    let guard = GLOB.lock().unwrap();
-    let mut rc: RefMut<RCin> = (*guard).borrow_mut();
-    let out = std::mem::replace(&mut rc.data, Vec::new());
-    out.iter().rev().collect()
-}
+    /// Clears the internal buffer
+    pub fn clear(&self){
+        let guard = GLOB.lock().unwrap();
+        let mut rc: RefMut<RCinInner> = (*guard).borrow_mut();
+        rc.data.clear();
+    }
 
-/// Clears the internal buffer
-pub fn clear(){
-    let guard = GLOB.lock().unwrap();
-    let mut rc: RefMut<RCin> = (*guard).borrow_mut();
-    rc.data.clear();
-}
-
-/// !Set to `true` __by default__!
-pub fn set_flush(flush: bool) {
-    let guard = GLOB.lock().unwrap();
-    let mut rcin: RefMut<RCin> = (*guard).borrow_mut();
-    rcin.auto_flush = flush;
+    /// !Set to `true` __by default__!
+    pub fn set_flush(&self, flush: bool) {
+        let guard = GLOB.lock().unwrap();
+        let mut rcin: RefMut<RCinInner> = (*guard).borrow_mut();
+        rcin.auto_flush = flush;
+    }
 }
