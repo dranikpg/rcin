@@ -101,6 +101,19 @@ lazy_static! {
     static ref GLOB: Mutex<RefCell<RCinInner>> = Mutex::new(RefCell::new(RCinInner::new()));
 }
 
+impl<T> std::ops::Shr<&mut T> for cin
+where T: FromStr {
+    type Output = bool;
+    fn shr(self, rhs: &mut T) -> Self::Output {
+        if let Some(value) = self.read() {
+            *rhs = value;
+            true
+        } else {
+            false
+        }
+    }
+}
+
 pub struct Rcin {}
 
 impl Rcin {
