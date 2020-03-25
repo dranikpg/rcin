@@ -114,9 +114,8 @@ pub fn read_safe<T: FromStr + Default>() -> T{
 /// One-liner to read until a value is valid
 pub fn read_next<T: FromStr>() -> T{
     loop {
-        match read(){
-            Some(t) => return t,
-            _ => ()
+        if let Some(t) = read() {
+            return t;
         }
     }
 }
@@ -129,7 +128,7 @@ pub fn read_line() -> String {
         std::io::stdout().flush().ok();
     }
     let mut buf = String::new();
-    while buf.trim().len() == 0{
+    while buf.trim().is_empty() {
         buf.clear();
         std::io::stdin().lock().read_line(&mut buf).ok();
     }
