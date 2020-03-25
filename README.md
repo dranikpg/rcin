@@ -13,18 +13,20 @@
  ## Example
 
  ```rust
- let x: i32 = rcin::read_next(); // reads until it finds a valid i32
+ use rcin::cin;
+
+ let x: i32 = cin.read_next(); // reads until it finds a valid i32
 
  print!("Enter three numbers: "); // flushes stdout by default before any input
  let mut max = i32::MIN;
  for _ in 0..3{
-     let t = rcin::read_safe();  // safe = unwrap_or_default
+     let t = cin.read_safe();  // safe = unwrap_or_default
      max = std::cmp::max(max, t);
  }
  println!("Max: {}", max);
 
  print!("Ready to continue?");
- rcin::pause(); //wait for newline
+ cin.pause(); //wait for newline
 
  ```
 
