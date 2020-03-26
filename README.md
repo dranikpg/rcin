@@ -1,16 +1,15 @@
+`cin`-like input from `stdin` for all types that implement `FromStr`.
 
- Some functions for cin like input from stdin for all types that implement FromStr
+Useful for quick prototyping and debugging without passing any state around.
 
- Useful for quick prototyping and debugging without passing any state around.
+(And for people who complain that input in rust is too verbose)
 
- (And for people who complain that input in rust is too verbose)
+It stores a buffer of the last line and tries to consume it first.
+It will block until it finds any sequence of non-whitespace characters.
 
- It stores a buffer of the last line and tries to consume it first.
- Blocks until it finds any sequence of non whitespace characters
+Depends on the [lazy_static](https://docs.rs/lazy_static) crate for storing global state.
 
- Depends on the [lazy_static](https://docs.rs/lazy_static) crate for storing global state
-
- ## Example
+## Example
 
  ```rust
  use rcin::cin;
@@ -27,22 +26,21 @@
 
  print!("Ready to continue?");
  cin.pause(); //wait for newline
+```
 
- ```
+## Thread safety
 
- ## Thread safety
+`Rcin` is thread safe, but all threads share one buffer.
+(Parallel input from `stdin` is not a usable thing, is it?)
 
- Rcin is thread safe, but all threads will share one buffer.
- (Parallel input from stdin is not a usable thing, is it?)
+`pause` is __not__ a common lock for all threads.
 
- `pause` is __not__ a common lock for all threads
+## Corner case
 
- ## Corner case
+Does __not__ read the input char by char like cin and requires whitespace between groups.
 
- Does __not__ read the input char by char like cin and requires whitespaces between groups
-
- Reading an int:
- ```text
- C++: 17GRABAGE => 17 //perfectly fine lol
- RCin: 17GARBAGE => None
- ```
+Reading an int:
+```text
+C++: 17GARBAGE => 17 // perfectly fine lol
+RCin: 17GARBAGE => None
+```
