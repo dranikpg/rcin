@@ -10,19 +10,22 @@ It will block until it finds any sequence of non-whitespace characters.
 Depends on the [lazy_static](https://docs.rs/lazy_static) crate for storing global state.
 
 ## Example
-```rust
-let x: i32 = rcin::read_next(); // reads until it finds a valid i32
 
-print!("Enter three numbers: "); // flushes stdout by default before any input
-let mut max = std::i32::MIN;
-for _ in 0..3 {
-    let t = rcin::read_safe();  // safe = unwrap_or_default
-    max = std::cmp::max(max, t);
-}
-println!("Max: {}", max);
+ ```rust
+ use rcin::cin;
 
-print!("Ready to continue?");
-rcin::pause(); // wait for newline
+ let x: i32 = cin.read_next(); // reads until it finds a valid i32
+
+ print!("Enter three numbers: "); // flushes stdout by default before any input
+ let mut max = i32::MIN;
+ for _ in 0..3{
+     let t = cin.read_safe();  // safe = unwrap_or_default
+     max = std::cmp::max(max, t);
+ }
+ println!("Max: {}", max);
+
+ print!("Ready to continue?");
+ cin.pause(); //wait for newline
 ```
 
 ## Thread safety
