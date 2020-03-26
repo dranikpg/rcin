@@ -11,13 +11,13 @@
 //!
 //! ## Example
 //!
-//! ```
+//! ```no_run
 //! use rcin::cin;
 //!
 //! let x: i32 = cin.read_next(); // reads until it finds a valid i32
 //!
 //! print!("Enter three numbers: "); // flushes stdout by default before any input
-//! let mut max = i32::MIN;
+//! let mut max = std::i32::MIN;
 //! for _ in 0..3{
 //!     let t = cin.read_safe();  // safe = unwrap_or_default
 //!     max = std::cmp::max(max, t);
@@ -26,7 +26,6 @@
 //!
 //! print!("Ready to continue?");
 //! cin.pause(); //wait for newline
-//!
 //! ```
 //!
 //! ## Thread safety
