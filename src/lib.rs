@@ -44,6 +44,7 @@
 //! C++: 17GARBAGE => 17 // perfectly fine lol
 //! RCin: 17GARBAGE => None
 //! ```
+#![allow(non_upper_case_globals)]
 use lazy_static::lazy_static;
 use std::cell::{Ref, RefCell, RefMut};
 use std::io::{BufRead, Write};
@@ -133,12 +134,7 @@ impl Rcin {
 
     /// One-liner to read until a value is valid
     pub fn read_next<T: FromStr>(&self) -> T{
-        loop {
-            match self.read(){
-                Some(t) => return t,
-                _ => ()
-            }
-        }
+        loop { if let Some(t) = self.read() { return t } }
     }
 
     /// One-liner to read a __nonempty__ line
@@ -149,7 +145,7 @@ impl Rcin {
             std::io::stdout().flush().ok();
         }
         let mut buf = String::new();
-        while buf.trim().len() == 0{
+        while buf.trim().is_empty() {
             buf.clear();
             std::io::stdin().lock().read_line(&mut buf).ok();
         }
