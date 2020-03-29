@@ -182,12 +182,12 @@ impl Stream {
         let mut buf = String::new();
         loop {
             match self.pop_char() {
-                None => break,
+                None => break, //might be EOF
                 Some('\n') => break,
                 Some(c) => buf.push(c),
             }
         }
-        if self.error {
+        if self.error && buf.is_empty() {
             None
         } else {
             Some(buf)
