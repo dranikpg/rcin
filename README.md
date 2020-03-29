@@ -1,46 +1,43 @@
-`cin`-like input from `stdin` for all types that implement `FromStr`.
+ 
+Input crate that mimics c++ cin/ifstream
 
-Useful for quick prototyping and debugging without passing any state around.
+Rcin is great for prototyping and offers one crucial advantage over the classical
+BufReader approach. The only methods of BufRead/Read that work with strings are `read_to_string`
+and `read_line`, which can be unusable if a big file consists only of one or a few lines.
 
-(And for people who complain that input in rust is too verbose)
+In contrast to similar input streams for rust, rcin can extract single characters.
 
-It stores a buffer of the last line and tries to consume it first.
-It will block until it finds any sequence of non-whitespace characters.
+Rcin also includes a static wrapper over stdin
 
-Depends on the [lazy_static](https://docs.rs/lazy_static) crate for storing global state.
-
-## Example
-
- ```rust
- use rcin::cin;
-
- let x: i32 = cin.read_next(); // reads until it finds a valid i32
-
- print!("Enter three numbers: "); // flushes stdout by default before any input
- let mut max = i32::MIN;
- for _ in 0..3{
-     let t = cin.read_safe();  // safe = unwrap_or_default
-     max = std::cmp::max(max, t);
- }
- println!("Max: {}", max);
-
- print!("Ready to continue?");
- cin.pause(); //wait for newline
+## Examples
+To read from stdin
+``` rust
+    
+    let mut i = rin.read().unwrap_or(2020); // read any type that implements FromString
+    
+    while rin >> &mut i{ // c++ style operator overload
+        println!("{}", i);
+    }
+    
+    cin.read_line(); // read a line
 ```
-
-## Thread safety
-
-`Rcin` is thread safe, but all threads share one buffer.
-(Parallel input from `stdin` is not a usable thing, is it?)
-
-`pause` is __not__ a common lock for all threads.
-
-## Corner case
-
-Does __not__ read the input char by char like cin and requires whitespace between groups.
-
-Reading an int:
-```text
-C++: 17GARBAGE => 17 // perfectly fine lol
-RCin: 17GARBAGE => None
+To read a file or any source that implements Read
+``` rust
+    let f = File::open("test.txt").unwrap();
+    let mut reader = RInStream::from_file(f); // create RInStream instance
+    reader.skip_line();                       // skip first line
+    while reader.valid(){                     // while there are no errors from the source
+        match reader.read::<i32>(){           // read i32
+            Some(v) => (),
+            None => ()
+        }
+    }
 ```
+## Inner mechanics
+The inner stream buffers the source data exactly like BufRead with the same default buffer size,
+but then tries to extract valid utf8 chars from the byte sequence. 
+
+Utf8 offers many whitespaces, however the most used ones consist only of a single byte(tab, 
+space, ...). If any further versions will exist, they might leave out support for uncommon whitespaces, 
+to speed up the parsing process and use the builtin utf8 parser. This also means that such streams won't be 
+able to read the data char by char efficiently.

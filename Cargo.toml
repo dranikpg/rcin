@@ -1,13 +1,13 @@
 [package]
 name = "rcin"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["dranikpg"]
 license="MIT"
 edition = "2018"
 
-description="Functions for prototyping with cin like input"
+description="Simple rust input streams"
 keywords=["input"]
-
+resository="https://github.com/dranikpg/rcin"
 homepage="https://github.com/dranikpg/rcin"
 readme = "README.md"
 
